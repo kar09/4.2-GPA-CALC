@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator</title>
+</head>
+<body>
+    <h1>4.2-GPA-Calculator</h1>
+    <form id="gpaForm">
+        <h2>Enter Grades and Course Types:</h2>
+        <div id="grades">
+            <div>
+                <label>Grade (0-4.2): <input type="number" step="0.01" min="0" max="4.2" name="grade"></label>
+                <label>Course Type:
+                    <select name="courseType">
+                        <option value="0">Normal</option>
+                        <option value="0.5">Honors</option>
+                        <option value="1">AP</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <button type="button" onclick="addGradeInput()">Add Another Grade</button>
+        <h2>Other Inputs:</h2>
+        <label>Past Credits Completed: <input type="number" step="1" min="0" id="pastCredits"></label><br>
+        <label>Current Weighted GPA: <input type="number" step="0.01" min="0" max="4.2" id="currentWeightedGPA"></label><br>
+        <label>Current Unweighted GPA: <input type="number" step="0.01" min="0" max="4.2" id="currentUnweightedGPA"></label><br>
+        <button type="button" onclick="calculateGPA()">Calculate GPA</button>
+    </form>
+
+    <h2>Results:</h2>
+    <p> GPA RESULTS </p>
+
+    <script>
+        function addGradeInput() {
+            const gradesDiv = document.getElementById('grades');
+            const newGradeDiv = document.createElement('div');
+            newGradeDiv.innerHTML = `
+                <label>Grade (0-4.2): <input type="number" step="0.01" min="0" max="4.2" name="grade"></label>
+                <label>Course Type:
+                    <select name="courseType">
+                        <option value="0">Normal</option>
+                        <option value="0.5">Honors</option>
+                        <option value="1">AP</option>
+                    </select>
+                </label>
+            `;
+            gradesDiv.appendChild(newGradeDiv);
+        }
+
+        function calculateGPA() {
+            const grades = document.getElementsByName('grade');
+            const courseTypes = document.getElementsByName('courseType');
+            const pastCredits = parseFloat(document.getElementById('pastCredits').value) || 0;
+            const currentWeightedGPA = parseFloat(document.getElementById('currentWeightedGPA').value) || 0;
+            const currentUnweightedGPA = parseFloat(document.getElementById('currentUnweightedGPA').value) || 0;
+
+            let totalWeightedPoints = pastCredits * currentWeightedGPA;
+            let totalUnweightedPoints = pastCredits * currentUnweightedGPA;
+            let totalCredits = pastCredits;
+
+            for (let i = 0; i < grades.length; i++) {
+                const grade = parseFloat(grades[i].value) || 0;
+                const boost = parseFloat(courseTypes[i].value) || 0;
+                totalWeightedPoints += grade + boost;
+                totalUnweightedPoints += grade;
+                totalCredits += 1;
+            }
+
+            const newWeightedGPA = totalWeightedPoints / totalCredits;
+            const newUnweightedGPA = totalUnweightedPoints / totalCredits;
+
+            document.getElementById('results').textContent = `
+                Weighted GPA: ${newWeightedGPA.toFixed(2)}
+                Unweighted GPA: ${newUnweightedGPA.toFixed(2)}
+            `;
+        }
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPA Calculator with Grade Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    caption {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>GPA Calculator</h1>
+  <p>Use the table below to see how letter grades correspond to GPA values for Regular, Honors, and AP courses.</p>
+
+  <table>
+    <caption>GPA Conversion Table</caption>
+    <thead>
+      <tr>
+        <th>Letter Grade</th>
+        <th>Regular GPA</th>
+        <th>Honors GPA (+0.5)</th>
+        <th>AP GPA (+1.0)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A+</td>
+        <td>4.2</td>
+        <td>4.7</td>
+        <td>5.2</td>
+      </tr>
+      <tr>
+        <td>A</td>
+        <td>4.0</td>
+        <td>4.5</td>
+        <td>5.0</td>
+      </tr>
+      <tr>
+        <td>A-</td>
+        <td>3.7</td>
+        <td>4.2</td>
+        <td>4.7</td>
+      </tr>
+      <tr>
+        <td>B+</td>
+        <td>3.3</td>
+        <td>3.8</td>
+        <td>4.3</td>
+      </tr>
+      <tr>
+        <td>B</td>
+        <td>3.0</td>
+        <td>3.5</td>
+        <td>4.0</td>
+      </tr>
+      <tr>
+        <td>B-</td>
+        <td>2.7</td>
+        <td>3.2</td>
+        <td>3.7</td>
+      </tr>
+      <tr>
+        <td>C+</td>
+        <td>2.3</td>
+        <td>2.8</td>
+        <td>3.3</td>
+      </tr>
+      <tr>
+        <td>C</td>
+        <td>2.0</td>
+        <td>2.5</td>
+        <td>3.0</td>
+      </tr>
+      <tr>
+        <td>C-</td>
+        <td>1.7</td>
+        <td>2.2</td>
+        <td>2.7</td>
+      </tr>
+      <tr>
+        <td>D+</td>
+        <td>1.3</td>
+        <td>1.8</td>
+        <td>2.3</td>
+      </tr>
+      <tr>
+        <td>D</td>
+        <td>1.0</td>
+        <td>1.5</td>
+        <td>2.0</td>
+      </tr>
+      <tr>
+        <td>F</td>
+        <td>0.0</td>
+        <td>0.0</td>
+        <td>0.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
+
